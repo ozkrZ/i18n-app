@@ -1,0 +1,81 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="my-app-switcher-lang"> 
+  <template> 
+    <style>
+      :host {
+        display: block;
+      }         
+    </style>
+    <iron-ajax
+      auto
+      url="/data/{{lang}}.json"
+      handle-as="json"
+      last-response="{{data}}"
+      loading="{{cargando}}"
+    ></iron-ajax>     
+    <h2>Hello [[data.title]]!</h2>
+
+   <!--  <div on-text-append="fragment">
+      <paper-input label="Titulo" on-value-changed="someChange" value={{prop1}}></paper-input>
+      <paper-input label="Nombre completo" on-value-changed="someChange" value=[[fullName]]></paper-input>
+      <paper-button class="" on-click="insertText">Mi botón mágico</paper-button>
+    </div> -->
+
+  </template>
+
+  <script>    
+    class MyAppSwitcherLang extends Polymer.Element {  
+      static get is() { return 'my-app-switcher-lang'; }
+      static get properties() {
+        return {
+            lang: {
+            type: String,
+            value: ''
+          },
+          fragment: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+
+      connectedCallback() {
+         super.connectedCallback();  
+        // console.log(`lang: [${this.lang}]`);
+      }
+
+      
+     ready() {
+      super.ready();      
+
+    }
+
+
+     /* getTitle(){
+        return 'Titulo de la práctica';
+      }
+
+      someChange(event) {
+        console.log(event.detail.value);
+      }
+
+      insertText(event){
+        this.set('prop1', 'mochila');
+        this.dispatchEvent(new CustomEvent('text-append',{
+            composed: true,
+            bubbles: true
+        }));
+      }
+
+      notifyUser(event){
+        alert('Mochila se agregó al input de title');
+      } */
+
+
+    }  // class 
+
+    window.customElements.define(MyAppSwitcherLang.is, MyAppSwitcherLang);
+  </script>
+</dom-module>

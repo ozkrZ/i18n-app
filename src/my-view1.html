@@ -9,31 +9,64 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="shared-styles.html">
+
+<link rel="import" href="my-app-switcher-lang.html">
 
 <dom-module id="my-view1">
   <template>
     <style include="shared-styles">
       :host {
         display: block;
-
         padding: 10px;
-      }
+      } 
     </style>
+      <my-app-switcher-lang lang="[[selectedItem]]"></my-app-switcher-lang>    
+      <!-- <h1>[[selectedItem]]</h1> -->
+      <paper-listbox 
+                class="dropdown-content" 
+                attr-for-selected="selected-item" 
+                selected="{{selectedItem}}"                 
+                fallback-selection="spanish">
+          <paper-item selected-item="spanish">Español</paper-item>
+          <paper-item selected-item="english">English</paper-item>
+      </paper-listbox>  
 
-    <div class="card">
-      <div class="circle">1</div>
-      <h1>View One</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
-    </div>
   </template>
 
   <script>
-    class MyView1 extends Polymer.Element {
-      static get is() { return 'my-view1'; }
-    }
+    class MyView1 extends Polymer.Element { 
+      static get is() { return 'my-view1'; } 
+
+  /* static get properties() {
+        return {
+            selectedIteme: {
+            type: Object,            
+            notify: true,
+            reflectToAttribute: true
+          },
+          selectedItem: {
+            type: String,            
+            notify: true,
+            reflectToAttribute: true
+          },
+        };
+      }*/
+      
+        changeLang(event, item) {       
+         console.log (`seleccionado:[${item}]`);        
+        } 
+    
+
+    } // class
 
     window.customElements.define(MyView1.is, MyView1);
   </script>
 </dom-module>
+
+
+
+//*on-selected-item-changed="changeLang(event,[[selectedItem]])"  */  
+  
