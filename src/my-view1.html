@@ -24,7 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <iron-ajax
     auto
-    url="http://127.0.0.1:8081/components/polymer-starter-kit/data/es.json"
+    url="http://127.0.0.1:8081/data/idiom.js"
     handle-as="json"
     last-response="{{response}}"
   ></iron-ajax>
@@ -36,14 +36,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <option value="">fr</option>
         <option value="">de</option>
       </select>
-        <h1>[[response.title]]</h1>
-        <p>[[response.extract]]</p>
+        <h1>[[response.name]]</h1>
+        <p>[[response.body]]</p>
     </div>
   </template>
 
   <script>
     class MyView1 extends Polymer.Element {
       static get is() { return 'my-view1'; }
+
+
+
     }
 
     window.customElements.define(MyView1.is, MyView1);
