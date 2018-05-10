@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
 
+
 <dom-module id="my-view1">
   <template>
     <style include="shared-styles">
@@ -19,20 +20,81 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+      #paragraph{
+        text-align: justify;
+      }
+
+      paper-item{
+        padding-left: 30px;
+        cursor: pointer;
+      }
+
+      paper-item[value="en"]{
+        background: url("../images/us.png") no-repeat 5px 17px;
+      }
+
+      paper-item[value="es"]{
+        background: url("../images/mx.png") no-repeat 5px 17px;
+      }
+
+      paper-item[value="fr"]{
+        background: url("../images/fr.png") no-repeat 5px 17px;
+      }
+
+      paper-item[value="th"]{
+        background: url("../images/th.png") no-repeat 5px 17px;
+      }
     </style>
 
     <div class="card">
       <div class="circle">1</div>
-      <h1>View One</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+      <div>
+
+
+        <paper-dropdown-menu on-value-changed="languageChange" noink no-animations id="language" Label="Language">
+          <paper-listbox slot="dropdown-content" selected="1">
+            <paper-item value="en">En</paper-item>
+            <paper-item value="es">Es</paper-item>
+            <paper-item value="fr">Fr</paper-item>
+            <paper-item value="th">Th</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+        <div id="content">
+          <h4 id="title"></h4>
+          <p id="paragraph"></p>
+        </div>
+      </div>
     </div>
+    <translate-component id="myComponent" lang="es"></translate-component>
+
   </template>
 
   <script>
     class MyView1 extends Polymer.Element {
       static get is() { return 'my-view1'; }
+
+      connectedCallback(){
+        super.connectedCallback();
+
+        this.$.myComponent.addEventListener('ajax-response',(event)=>{
+          this.$.title.innerText=event.detail.title;
+          this.$.paragraph.innerText=event.detail.paragraph;
+        });
+      }
+
+      languageChange(){
+        let language=this.$.language.value;
+        if (language!==''){
+          let myComponent=this.$.myComponent;
+          myComponent.lang=language;
+        }
+
+      }
+
+
     }
+
+
 
     window.customElements.define(MyView1.is, MyView1);
   </script>

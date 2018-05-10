@@ -1,0 +1,54 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+
+<dom-module id="translate-component">
+  <template>
+    <iron-ajax
+    url=""
+    handle-as="text"
+    on-response="fetchData"
+    debounce-duration="300" id="myAjax"></iron-ajax>
+  </template>
+
+  <script>
+    class TranslateComponent extends Polymer.Element {
+      static get is() { return 'translate-component'; }
+
+      static get properties() {
+        return {
+          lang: {
+            type: String,
+            value: 'es'
+          }
+        };
+      }
+
+      connectedCallback(){
+        super.connectedCallback();
+      }
+
+      attributeChangedCallback(){
+        super.attributeChangedCallback();
+        if (this.$){
+          let myAjax=this.$.myAjax;
+          myAjax.url=`/data/${this.lang}.json`
+          myAjax.generateRequest();
+        }
+
+      }
+
+      fetchData (event){
+        this.dispatchEvent(new CustomEvent('ajax-response',{
+          composed:true,
+          bubbles:true,
+          detail:JSON.parse(event.detail.response)
+        }));
+      }
+
+
+    }
+
+    window.customElements.define(TranslateComponent.is, TranslateComponent);
+  </script>
+</dom-module>
