@@ -20,11 +20,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
       :host {
         display: block;
-        padding: 10px;
+        padding: 10px;  
       } 
     </style>
-      <my-app-switcher-lang lang="[[selectedItem]]"></my-app-switcher-lang>    
-      <!-- <h1>[[selectedItem]]</h1> -->
+     <h1>{{fragment}}</h1>
+      <my-app-switcher-lang lang="[[selectedItem]]" fragment="{{fragment}}"></my-app-switcher-lang>      
       <paper-listbox 
                 class="dropdown-content" 
                 attr-for-selected="selected-item" 
@@ -38,27 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     class MyView1 extends Polymer.Element { 
-      static get is() { return 'my-view1'; } 
-
-  /* static get properties() {
-        return {
-            selectedIteme: {
-            type: Object,            
-            notify: true,
-            reflectToAttribute: true
-          },
-          selectedItem: {
-            type: String,            
-            notify: true,
-            reflectToAttribute: true
-          },
-        };
-      }*/
-      
-        changeLang(event, item) {       
-         console.log (`seleccionado:[${item}]`);        
-        } 
-    
+      static get is() { return 'my-view1'; }                        
 
     } // class
 
@@ -66,7 +46,4 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
 </dom-module>
 
-
-
-//*on-selected-item-changed="changeLang(event,[[selectedItem]])"  */  
   
