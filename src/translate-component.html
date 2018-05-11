@@ -1,54 +1,99 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
 
 
 <dom-module id="translate-component">
-  <template>
-    <iron-ajax
-    url=""
-    handle-as="text"
-    on-response="fetchData"
-    debounce-duration="300" id="myAjax"></iron-ajax>
-  </template>
+    <template>
+        <style>
+            paper-item {
+                padding-left: 30px;
+                cursor: pointer;
+            }
 
-  <script>
-    class TranslateComponent extends Polymer.Element {
-      static get is() { return 'translate-component'; }
+            paper-item[value="en"] {
+                background: url("images/us.png") no-repeat 5px 17px;
+            }
 
-      static get properties() {
-        return {
-          lang: {
-            type: String,
-            value: 'es'
-          }
-        };
-      }
+            paper-item[value="es"] {
+                background: url("images/mx.png") no-repeat 5px 17px;
+            }
 
-      connectedCallback(){
-        super.connectedCallback();
-      }
+            paper-item[value="fr"] {
+                background: url("images/fr.png") no-repeat 5px 17px;
+            }
 
-      attributeChangedCallback(){
-        super.attributeChangedCallback();
-        if (this.$){
-          let myAjax=this.$.myAjax;
-          myAjax.url=`/data/${this.lang}.json`
-          myAjax.generateRequest();
+            paper-item[value="th"] {
+                background: url("images/th.png") no-repeat 5px 17px;
+            }
+        </style>
+        <iron-ajax
+                url=""
+                handle-as="text"
+                on-response="fetchData"
+                debounce-duration="300" id="myAjax"></iron-ajax>
+
+        <paper-dropdown-menu on-value-changed="languageChange" noink no-animations id="language" Label="Language">
+            <paper-listbox slot="dropdown-content" selected="1">
+                <paper-item value="en">En</paper-item>
+                <paper-item value="es">Es</paper-item>
+                <paper-item value="fr">Fr</paper-item>
+                <paper-item value="th">Th</paper-item>
+            </paper-listbox>
+        </paper-dropdown-menu>
+    </template>
+
+    <script>
+        class TranslateComponent extends Polymer.Element {
+            static get is() {
+                return 'translate-component';
+            }
+
+            static get properties() {
+                return {
+                    lang: {
+                        type: String,
+                        value: 'es',
+                        observer: '_changeLanguageRequest'
+                    },
+                    urlPrefix: {
+                        type: String,
+                        value: ''
+                    }
+                };
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+            }
+
+            _changeLanguageRequest() {
+                this.$.myAjax.url = `${this.urlPrefix}${this.lang}.json`;
+                this.$.myAjax.generateRequest();
+            }
+
+            languageChange() {
+                const language = this.$.language.value;
+                if (language !== '') {
+                    this.set('lang', language);
+                }
+
+            }
+
+            fetchData(event) {
+                this.dispatchEvent(new CustomEvent('language-changed', {
+                    composed: true,
+                    bubbles: true,
+                    detail: JSON.parse(event.detail.response)
+                }));
+            }
+
+
         }
 
-      }
-
-      fetchData (event){
-        this.dispatchEvent(new CustomEvent('ajax-response',{
-          composed:true,
-          bubbles:true,
-          detail:JSON.parse(event.detail.response)
-        }));
-      }
-
-
-    }
-
-    window.customElements.define(TranslateComponent.is, TranslateComponent);
-  </script>
+        window.customElements.define(TranslateComponent.is, TranslateComponent);
+    </script>
 </dom-module>

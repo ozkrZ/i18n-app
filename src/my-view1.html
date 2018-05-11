@@ -13,89 +13,55 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 <dom-module id="my-view1">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
 
-        padding: 10px;
-      }
-      #paragraph{
-        text-align: justify;
-      }
+                padding: 10px;
+            }
+        </style>
 
-      paper-item{
-        padding-left: 30px;
-        cursor: pointer;
-      }
-
-      paper-item[value="en"]{
-        background: url("../images/us.png") no-repeat 5px 17px;
-      }
-
-      paper-item[value="es"]{
-        background: url("../images/mx.png") no-repeat 5px 17px;
-      }
-
-      paper-item[value="fr"]{
-        background: url("../images/fr.png") no-repeat 5px 17px;
-      }
-
-      paper-item[value="th"]{
-        background: url("../images/th.png") no-repeat 5px 17px;
-      }
-    </style>
-
-    <div class="card">
-      <div class="circle">1</div>
-      <div>
-
-
-        <paper-dropdown-menu on-value-changed="languageChange" noink no-animations id="language" Label="Language">
-          <paper-listbox slot="dropdown-content" selected="1">
-            <paper-item value="en">En</paper-item>
-            <paper-item value="es">Es</paper-item>
-            <paper-item value="fr">Fr</paper-item>
-            <paper-item value="th">Th</paper-item>
-          </paper-listbox>
-        </paper-dropdown-menu>
-        <div id="content">
-          <h4 id="title"></h4>
-          <p id="paragraph"></p>
+        <div class="card">
+            <div class="circle">1</div>
+            <div on-language-changed="getData">
+                <translate-component lang="es" url-prefix="/data/"></translate-component>
+                <div id="content">
+                    <h4>[[title]]</h4>
+                    <p>[[paragraph]]</p>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <translate-component id="myComponent" lang="es"></translate-component>
 
-  </template>
+    </template>
 
-  <script>
-    class MyView1 extends Polymer.Element {
-      static get is() { return 'my-view1'; }
+    <script>
+        class MyView1 extends Polymer.Element {
+            static get is() {
+                return 'my-view1';
+            }
 
-      connectedCallback(){
-        super.connectedCallback();
+            static get properties() {
+                return {
+                    title: {
+                        type: String,
+                        value: ''
+                    },
+                    paragraph: {
+                        type: String,
+                        value: ''
+                    }
+                };
+            }
 
-        this.$.myComponent.addEventListener('ajax-response',(event)=>{
-          this.$.title.innerText=event.detail.title;
-          this.$.paragraph.innerText=event.detail.paragraph;
-        });
-      }
-
-      languageChange(){
-        let language=this.$.language.value;
-        if (language!==''){
-          let myComponent=this.$.myComponent;
-          myComponent.lang=language;
+            getData(event) {
+                const payload = event.detail;
+                this.set('title', payload.title);
+                this.set('paragraph', payload.paragraph);
+            }
         }
 
-      }
 
-
-    }
-
-
-
-    window.customElements.define(MyView1.is, MyView1);
-  </script>
+        window.customElements.define(MyView1.is, MyView1);
+    </script>
 </dom-module>
