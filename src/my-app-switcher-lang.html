@@ -1,47 +1,56 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
-<dom-module id="my-app-switcher-lang"> 
-  <template> 
-    <style>
-      :host {
-        display: block;
-      }         
-    </style>
-    <iron-ajax 
-      auto
-      url="/data/{{lang}}.json"
-      handle-as="json"
-      last-response="{{data}}"
-      loading="{{cargando}}"
-      on-response="handleResponse"      
-    ></iron-ajax>    
-        
-  </template>
+<dom-module id="my-app-switcher-lang">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <iron-ajax
+                id="http"
+                url="/data/[[lang]].json"
+                handle-as="json"
+                on-response="handleResponse"
+        ></iron-ajax>
 
-  <script>    
-    class MyAppSwitcherLang extends Polymer.Element {  
-      static get is() { return 'my-app-switcher-lang'; }
-      static get properties() {
-        return {
-            lang: {
-            type: String,
-            value: 'spanish',
-            notify: true            
-          },
-          fragment: {
-            type: String,                        
-            notify: true            
-          }         
-        };
-      }
-   
-       handleResponse(data) {                
-                this.set("fragment", this.data.title);                               
-            }           
-               
-    }  // class 
+    </template>
 
-    window.customElements.define(MyAppSwitcherLang.is, MyAppSwitcherLang);
-  </script>
+    <script>
+        class MyAppSwitcherLang extends Polymer.Element {
+            static get is() {
+                return 'my-app-switcher-lang';
+            }
+
+            static get properties() {
+                return {
+                    lang: {
+                        type: String,
+                        value: 'spanish',
+                        observer: 'requestContent'
+                    },
+                    data: {
+                        type: Object,
+                        value: {}
+                    }
+                };
+            }
+
+            handleResponse() {
+                this.set('data', this.$.http.lastResponse);
+                this.dispatchEvent(new CustomEvent('lang-changed', {
+                    bubbles: true,
+                    composed: true,
+                    detail: this.data
+                }));
+            }
+
+            requestContent() {
+                this.$.http.generateRequest();
+            }
+        }  // class
+
+        window.customElements.define(MyAppSwitcherLang.is, MyAppSwitcherLang);
+    </script>
 </dom-module>

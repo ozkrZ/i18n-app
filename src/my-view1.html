@@ -16,42 +16,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-app-switcher-lang.html">
 
 <dom-module id="my-view1">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
-        padding: 10px;  
-      } 
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 10px;
+            }
 
-      h1 {
-          color: rgb(31, 77, 146);
-          font-family: Arial, Helvetica, sans-serif;
-      }
-    </style>
-     <h1>{{fragment}}</h1>    
-      <my-app-switcher-lang lang="[[selectedItem]]" fragment="{{fragment}}"></my-app-switcher-lang>      
-      <paper-listbox 
-                class="dropdown-content" 
-                attr-for-selected="selected-item" 
-                selected="{{selectedItem}}"                 
-                fallback-selection="spanish">
-          <paper-item selected-item="hebrew">עברית</paper-item>                
-          <paper-item selected-item="spanish">Español</paper-item>
-          <paper-item selected-item="english">English</paper-item>
-          <paper-item selected-item="arab">العربية</paper-item>
+            h1 {
+                color: rgb(31, 77, 146);
+                font-family: Arial, Helvetica, sans-serif;
+            }
+        </style>
+        <div on-lang-changed="changeLanguage">
+            <h1>[[data.title]]</h1>
+            <my-app-switcher-lang lang="[[selectedItem]]"></my-app-switcher-lang>
+            <paper-listbox
+                    class="dropdown-content"
+                    attr-for-selected="selected-item"
+                    selected="{{selectedItem}}"
+                    fallback-selection="spanish">
+                <paper-item selected-item="hebrew">עברית</paper-item>
+                <paper-item selected-item="spanish">Español</paper-item>
+                <paper-item selected-item="english">English</paper-item>
+                <paper-item selected-item="arab">العربية</paper-item>
 
-      </paper-listbox>  
+            </paper-listbox>
+        </div>
 
-  </template>
+    </template>
 
-  <script>
-    class MyView1 extends Polymer.Element { 
-      static get is() { return 'my-view1'; }                        
+    <script>
+        class MyView1 extends Polymer.Element {
+            static get is() {
+                return 'my-view1';
+            }
 
-    } // class
+            static get properties() {
+                return {
+                    data: {
+                        type: Object,
+                        value: {}
+                    }
+                };
+            }
 
-    window.customElements.define(MyView1.is, MyView1);
-  </script>
+            changeLanguage(event) {
+                this.set('data', event.detail);
+                console.log(event.detail);
+            }
+        } // class
+
+        window.customElements.define(MyView1.is, MyView1);
+    </script>
 </dom-module>
 
-  
